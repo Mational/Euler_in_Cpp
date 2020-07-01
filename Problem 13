@@ -1,0 +1,60 @@
+#include <iostream>
+#include <fstream>
+#include <vector>
+#include <windows.h>
+#include <string>
+
+using namespace std;
+
+vector<int>suma(50,0);
+
+void sumuj(vector<int>&il)
+{
+    for( int i=suma.size()-1;i>=0;i--)
+    {
+        suma[i]+=il[i];
+        if(suma[i]>9)
+        {
+            if(i!=0)
+            {
+                int tmp=suma[i];
+                suma[i]=tmp%10;
+                suma[i-1]+=tmp/10;
+            }
+        }
+    }
+    for(int i=0;i<50;i++)
+    {
+        cout << suma[i];
+    }
+    return;
+}
+
+void czytaj(vector<int>&l,string sciezka)
+{
+    fstream plik;
+    string linia,cyfra;
+    plik.open(sciezka,ios::in);
+    while(!plik.eof())
+    {
+        plik >> linia;
+        for(int i=0;i<50;i++)
+        {
+            cyfra.insert(0,linia,i,1);
+            int c=stoi(cyfra);
+            l.push_back(c);
+            cyfra="";
+        }
+        sumuj(l);
+        l.clear();
+    }
+    plik.close();
+    return;
+}
+
+int main()
+{
+    vector<int>liczba;
+    czytaj(liczba,"dane.txt");
+    return 0;
+}
