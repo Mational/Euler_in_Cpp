@@ -43,3 +43,4 @@ int main()
     cout << "Wynik: " << maks << endl;
     return 0;
 }
+
