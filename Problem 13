@@ -1,60 +1,73 @@
 #include <iostream>
 #include <fstream>
-#include <vector>
-#include <windows.h>
-#include <string>
 
 using namespace std;
 
-vector<int>suma(50,0);
-
-void sumuj(vector<int>&il)
+void read(string path,string num[])
 {
-    for( int i=suma.size()-1;i>=0;i--)
+    fstream file;
+    file.open(path,ios::in);
+    for(int i=0;i<100;i++)
     {
-        suma[i]+=il[i];
-        if(suma[i]>9)
-        {
-            if(i!=0)
-            {
-                int tmp=suma[i];
-                suma[i]=tmp%10;
-                suma[i-1]+=tmp/10;
-            }
-        }
+        file >> num[i];
     }
-    for(int i=0;i<50;i++)
-    {
-        cout << suma[i];
-    }
+    file.close();
     return;
 }
 
-void czytaj(vector<int>&l,string sciezka)
+string add(string r,string n)
 {
-    fstream plik;
-    string linia,cyfra;
-    plik.open(sciezka,ios::in);
-    while(!plik.eof())
+    if(r.size()<n.size())
     {
-        plik >> linia;
-        for(int i=0;i<50;i++)
-        {
-            cyfra.insert(0,linia,i,1);
-            int c=stoi(cyfra);
-            l.push_back(c);
-            cyfra="";
-        }
-        sumuj(l);
-        l.clear();
+        swap(r,n);
     }
-    plik.close();
+    int r_pos=r.size()-1;
+    int n_pos=n.size()-1;
+    int tmp=0;
+    while(r_pos>=0)
+    {
+        int r_num=r[r_pos]-48;
+        int n_num;
+        if(n_pos>=0)
+        {
+            n_num=n[n_pos]-48;
+        }
+        else
+        {
+            n_num=0;
+        }
+        int outcome=r_num+n_num+tmp;
+        r[r_pos]=(outcome%10)+48;
+        tmp=outcome/10;
+        n_pos--;
+        r_pos--;
+    }
+    if(tmp>0)
+    {
+        string stmp=to_string(tmp);
+        r=stmp+r;
+    }
+    return r;
+}
+
+void calculations(string num[])
+{
+    string result=num[0];
+    string sres;
+    for(int i=1;i<100;i++)
+    {
+        sres=add(result,num[i]);
+        result=sres;
+    }
+    result.erase(10);
+    cout << result << endl;
     return;
 }
 
 int main()
 {
-    vector<int>liczba;
-    czytaj(liczba,"dane.txt");
+    string numbers[100];
+    read("numbers.txt",numbers);
+    calculations(numbers);
     return 0;
 }
