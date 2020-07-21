@@ -1,0 +1,214 @@
+#include <iostream>
+#include <vector>
+#include <cstdlib>
+
+using namespace std;
+
+void fill_in(vector<int>&nums,vector<string>&type,int num)
+{
+    int number;
+    for(int i=num;i<10000;i++)
+    {
+        start:
+
+        // P8,19 is first octagonals number which is 4-digit number
+        for(int n=19;n*((3*n)-2)<10000;n++)
+        {
+            number=n*((3*n)-2);
+            if(number==i)
+            {
+                nums.push_back(i);
+                type.push_back("o");
+                i++;
+                goto start;
+            }
+            else if(number>i)
+                break;
+        }
+
+        // P7,21 is first heptagonal number which is 4-digit number
+        for(int n=21;n*(((5*n)-3))/2<10000;n++)
+        {
+            number=n*(((5*n)-3))/2;
+            if(number==i)
+            {
+                nums.push_back(i);
+                type.push_back("hept");
+                i++;
+                goto start;
+            }
+            else if(number>i)
+                break;
+        }
+
+        // P6,23 is first hexagonal number which is 4-digit number
+        for(int n=23;n*((2*n)-1)<10000;n++)
+        {
+            number=n*((2*n)-1);
+            if(number==i)
+            {
+                nums.push_back(i);
+                type.push_back("hex");
+                i++;
+                goto start;
+            }
+            else if(number>i)
+                break;
+        }
+
+        // P5,26 is first pentagonal number which is 4-digit number
+        for(int n=26;(n*((3*n)-1))/2<10000;n++)
+        {
+            number=(n*((3*n)-1))/2;
+            if(number==i)
+            {
+                nums.push_back(i);
+                type.push_back("p");
+                i++;
+                goto start;
+            }
+            else if(number>i)
+                break;
+        }
+
+        // P4,32 is first square number which is 4-digit number
+        for(int n=32;n*n<10000;n++)
+        {
+            number=n*n;
+            if(number==i)
+            {
+                nums.push_back(i);
+                type.push_back("s");
+                i++;
+                goto start;
+            }
+            else if(number>i)
+                break;
+        }
+
+        // P3,45 is first triangle number which is 4-digit number
+        for(int n=45;n*(n+1)/2<10000;n++)
+        {
+            number=n*(n+1)/2;
+            if(number==i)
+            {
+                nums.push_back(i);
+                type.push_back("t");
+                i++;
+                goto start;
+            }
+            else if(number>i)
+                break;
+        }
+    }
+    return;
+}
+
+bool check(int num1, int num2)
+{
+    string n1=to_string(num1);
+    string n2=to_string(num2);
+    if(n1[2]==n2[0] && n1[3]==n2[1])
+        return true;
+    return false;
+}
+
+bool if_not_repeat(int num, int t[], int t_size)
+{
+    for(int i=0;i<t_size;i++)
+        if(t[i]==num)
+            return false;
+    return true;
+}
+
+bool if_not_string_repeat(string text, string t[],int t_size)
+{
+    for(int i=0;i<t_size;i++)
+        if(t[i]==text)
+            return false;
+    return true;
+}
+
+void program(vector<int>&n,vector<string>&t)
+{
+    int chain_n[6]={0,0,0,0,0,0};
+    string chain_t[6]={"","","","","",""};
+    for(int c_1=0;c_1<n.size();c_1++)
+    {
+        chain_n[0]=n[c_1];
+        chain_t[0]=t[c_1];
+
+        for(int c_2=0;c_2<n.size();c_2++)
+        {
+            if( check(chain_n[0],n[c_2])==true
+                && if_not_repeat(n[c_2],chain_n,1) == true
+                && if_not_string_repeat(t[c_2],chain_t,1) == true)
+            {
+                chain_n[1]=n[c_2];
+                chain_t[1]=t[c_2];
+
+                for(int c_3=0;c_3<n.size();c_3++)
+                {
+                    if( check(chain_n[1],n[c_3])==true
+                        && if_not_repeat(n[c_3],chain_n,2) == true
+                        && if_not_string_repeat(t[c_3],chain_t,2) == true)
+                    {
+                        chain_n[2]=n[c_3];
+                        chain_t[2]=t[c_3];
+
+                        for(int c_4=0;c_4<n.size();c_4++)
+                        {
+                            if( check(chain_n[2],n[c_4])==true
+                                && if_not_repeat(n[c_4],chain_n,3) == true
+                                && if_not_string_repeat(t[c_4],chain_t,3) == true)
+                            {
+                                chain_n[3]=n[c_4];
+                                chain_t[3]=t[c_4];
+
+                                for(int c_5=0;c_5<n.size();c_5++)
+                                {
+                                    if( check(chain_n[3],n[c_5])==true
+                                        && if_not_repeat(n[c_5],chain_n,4) == true
+                                        && if_not_string_repeat(t[c_5],chain_t,4) == true)
+                                    {
+                                        chain_n[4]=n[c_5];
+                                        chain_t[4]=t[c_5];
+
+                                        for(int c_6=0;c_6<n.size();c_6++)
+                                        {
+                                            if( check(chain_n[4],n[c_6])==true
+                                                && check(n[c_6],chain_n[0]) == true
+                                                && if_not_repeat(n[c_6],chain_n,5) == true
+                                                && if_not_string_repeat(t[c_6],chain_t,5) == true)
+                                            {
+                                                chain_n[5]=n[c_6];
+                                                chain_t[5]=t[c_6];
+
+                                                int sum=0;
+                                                for(int i=0; i<6;i++)
+                                                {
+                                                    cout << chain_n[i] << "  ";
+                                                    sum+=chain_n[i];
+                                                }
+                                                cout << "\n\nSum: " << sum << endl;
+                                                return;
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+int main()
+{
+    vector<int> numbers;
+    vector<string> types;
+    fill_in(numbers,types,1001);
+    program(numbers,types);
+}
