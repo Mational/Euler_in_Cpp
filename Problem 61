@@ -184,3 +184,4 @@ int main()
     fill_in(numbers,types,1001);
     program(numbers,types, 0);
 }
+
